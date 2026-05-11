@@ -1,0 +1,22 @@
+gr-file-recorder (0.1.1-1) noble; urgency=medium
+
+  * CI workflow stabilisation: Python 3.12 (system), Node.js 24
+    actions, Qt offscreen platform, numpy<2 compatibility, uv cache.
+  * Merge commits now excluded from commit message validation.
+  * 112 tests passing.
+
+ -- Oleksandr Suvorov <cryosay@gmail.com>  Tue, 05 May 2026 16:30:00 +0300
+
+gr-file-recorder (0.1.0-1) noble; urgency=medium
+
+  * First public release.
+  * On-demand QT GUI recording sink with templated filenames.
+  * Built-in tokens: {date}, {counter}, {type}, {freq}, {{var}}.
+  * Push and toggle button modes with optional name prefix.
+  * Optional resolved-filename label next to the button.
+  * Auto-stop on duration or file-size limits.
+  * Tilde expansion and parent directory auto-creation.
+  * Pure-Python OOT module — no C++ build required.
+  * 112 tests covering all input types, vlen values, and Qt interaction.
+
+ -- Oleksandr Suvorov <cryosay@gmail.com>  Tue, 05 May 2026 16:00:00 +0300
