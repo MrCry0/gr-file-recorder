@@ -1,0 +1,68 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gr-file-recorder"
+version = "0.1.1"
+description = "GNU Radio QT GUI sink block for templated on-demand recording"
+readme = "README.md"
+license = {text = "GPL-3.0-or-later"}
+requires-python = ">=3.9"
+authors = [
+    { name = "Oleksandr Suvorov", email = "cryosay@gmail.com" },
+]
+keywords = ["gnuradio", "sdr", "qt", "recorder", "file-sink"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: X11 Applications :: Qt",
+    "Intended Audience :: Science/Research",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Topic :: Communications :: Ham Radio",
+]
+# gnuradio and PyQt5 are supplied by the host install, not pip.
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7",
+    "pytest-qt>=4",
+    "numpy>=1.20,<2; python_version < '3.13'",
+    "numpy>=2.0; python_version >= '3.13'",
+    "ruff>=0.4",
+]
+
+[project.urls]
+Source = "https://github.com/cryosay/gr-file-recorder"
+
+[tool.setuptools]
+package-dir = { "" = "python" }
+
+[tool.setuptools.packages.find]
+where = ["python"]
+include = ["file_recorder*"]
+
+# Drop the GRC block descriptor into the directory `gnuradio-companion`
+# searches by default. With `pip install .` (sys.prefix=/usr/local) the
+# YAML lands in /usr/local/share/gnuradio/grc/blocks/; with the deb
+# build (pybuild, prefix=/usr) it lands in /usr/share/gnuradio/grc/blocks/.
+[tool.setuptools.data-files]
+"share/gnuradio/grc/blocks" = ["grc/file_recorder_sink.block.yml"]
+"share/gnuradio/examples/gr-file-recorder" = ["examples/file_recorder_demo.grc"]
+
+[tool.pytest.ini_options]
+# Match GR's qtgui module: it pulls in PyQt5, so pytest-qt must use
+# the same binding — only one Qt binding can live in a process.
+qt_api = "pyqt5"
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py39"
+
+[tool.ruff.lint]
+# E/W: pycodestyle errors and warnings  F: pyflakes  I: isort
+select = ["E", "F", "W", "I"]
+# E501: line-length is not enforced by ruff (long lines are acceptable
+# when they aid readability of data tables or regex patterns).
+ignore = ["E501"]
