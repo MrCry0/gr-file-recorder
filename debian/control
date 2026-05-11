@@ -1,0 +1,31 @@
+Source: gr-file-recorder
+Section: hamradio
+Priority: optional
+Maintainer: Oleksandr Suvorov <cryosay@gmail.com>
+Build-Depends: debhelper-compat (= 13),
+               dh-python,
+               pybuild-plugin-pyproject,
+               python3-all,
+               python3-setuptools (>= 64)
+Standards-Version: 4.6.2
+Homepage: https://github.com/cryosay/gr-file-recorder
+Vcs-Browser: https://github.com/cryosay/gr-file-recorder
+Vcs-Git: https://github.com/cryosay/gr-file-recorder.git
+Rules-Requires-Root: no
+
+Package: gr-file-recorder
+Architecture: all
+Depends: ${python3:Depends},
+         ${misc:Depends},
+         gnuradio (>= 3.10),
+         python3-pyqt5
+Description: GNU Radio QT GUI sink for templated on-demand recording
+ file_recorder_sink is a GNU Radio out-of-tree (OOT) Python block that
+ provides a toolbar button for operator-driven recording of sample
+ streams into templated files.
+ .
+ Filename templates support date, incremental counter, and
+ flowgraph-variable substitution. Recording stops automatically when
+ a configurable duration or file-size cap is reached. The block
+ appears in GRC under the File Recorder category as "File Recorder
+ Sink".

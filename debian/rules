@@ -1,0 +1,15 @@
+#!/usr/bin/make -f
+# Build with pybuild + pyproject backend; dh_python3 picks up the
+# binary package name from debian/control. The setuptools data-files
+# entry in pyproject.toml drops the GRC YAML into share/gnuradio/grc/blocks/.
+
+export PYBUILD_NAME = file_recorder
+
+%:
+	dh $@ --with python3 --buildsystem=pybuild
+
+# The test suite requires gnuradio and numpy at runtime; those are not
+# listed as Build-Depends because they are host-provided. Tests are
+# run by the CI test job. Skip them here to keep the package build
+# self-contained.
+override_dh_auto_test:

@@ -1,0 +1,108 @@
+id: file_recorder_sink
+label: File Recorder Sink
+category: '[File Recorder]'
+flags: [python, throttle]
+
+parameters:
+-   id: file_template
+    label: File Template
+    dtype: string
+    default: 'recording_{date}_{counter}'
+    hide: none
+-   id: show_template
+    label: Show File Template
+    dtype: enum
+    options: ['False', 'True']
+    option_labels: [Hide, Show]
+    default: 'False'
+    hide: none
+-   id: input_type
+    label: Input Type
+    dtype: enum
+    options: [complex, float, int, short, byte]
+    option_labels: [Complex, Float, Int, Short, Byte]
+    default: complex
+-   id: vlen
+    label: Vec Length
+    dtype: int
+    default: '1'
+-   id: button_type
+    label: Button Type
+    dtype: enum
+    options: [push, toggle]
+    option_labels: [Push, Toggle]
+    default: toggle
+-   id: button_name
+    label: Button Name
+    dtype: string
+    default: ''
+    hide: none
+-   id: date_format
+    label: Date Format (strftime)
+    dtype: string
+    default: '%Y%m%d_%H%M%S'
+-   id: counter_start
+    label: Counter Start
+    dtype: int
+    default: '1'
+-   id: counter_step
+    label: Counter Step
+    dtype: int
+    default: '1'
+-   id: counter_style
+    label: Counter Style
+    dtype: enum
+    options: ['normal', '0-padded']
+    option_labels: [Normal, '0-padded (3 digits)']
+    default: '0-padded'
+-   id: record_duration
+    label: Record Duration (s)
+    dtype: int
+    default: '0'
+-   id: max_file_size
+    label: Max File Size (bytes)
+    dtype: int
+    default: '0'
+
+inputs:
+-   domain: stream
+    dtype: ${input_type}
+    vlen: ${vlen}
+
+templates:
+    imports: |-
+        import file_recorder
+        from PyQt5 import QtWidgets
+    make: |-
+        file_recorder.file_recorder_sink(
+            file_template=${file_template},
+            input_type='${input_type}',
+            vlen=${vlen},
+            button_type='${button_type}',
+            date_format=${date_format},
+            counter_start=${counter_start},
+            counter_step=${counter_step},
+            counter_style='${counter_style}',
+            record_duration=${record_duration},
+            max_file_size=${max_file_size},
+            button_name=${button_name},
+            show_template=${show_template},
+        )
+        self.${id}.set_top_block(self)
+        self._${id}_toolbar = QtWidgets.QToolBar(self)
+        self._${id}_toolbar.addWidget(self.${id}.qwidget())
+        if hasattr(self, 'addToolBar'):
+            self.addToolBar(self.${id}.dock_area(), self._${id}_toolbar)
+        else:
+            self.top_layout.addWidget(self._${id}_toolbar)
+
+documentation: |-
+    On-demand QT GUI sink that records its input stream to disk.
+
+    The toolbar button starts and stops recording. Filenames are
+    resolved from a template that may include {date}, {counter},
+    {type}, and {{flowgraph_var}} tokens — see SPECS.md for the full
+    grammar. Recording stops automatically if record_duration or
+    max_file_size is reached.
+
+file_format: 1
